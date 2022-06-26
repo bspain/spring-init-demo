@@ -90,3 +90,20 @@ Room{id=1, name='Piccadilly', roomNumber='P1', bedInfo='1Q'}
 Room{id=2, name='Piccadilly', roomNumber='P2', bedInfo='1Q'}
 Room{id=3, name='Piccadilly', roomNumber='P3', bedInfo='1Q'}
 ```
+
+## Chapter 3
+
+### Spring IoC behaviors
+`src/main/java/com/example/springinitdemo/util/DateUtils.java` has been decorated as a `@Component`.  This is the indicator to Spring to create it as singleton via IoC.  `AppStartupEvent` defines this now as a dependency in it's ctor:
+```
+    public AppStartupEvent(ReservationService reservationService, DateUtils dateUtils) {
+        this.reservationService = reservationService;
+        this.dateUtils = dateUtils;
+    }
+```
+
+Now, Spring will handle providing the singleton `DateUtils` instance to this when necessary.
+
+The chapter also now includes a `@Service` annotation on `src/main/java/com/example/springinitdemo/business/ReservationService.java` which acts in a similar way.  (The author indicated that `@Service` allows for more features, via Abstract Object Programming, such as common areas for Tracing, Auditing, etc... using these features)
+
+This was a very powerful example of succeeding control fully to the IoC system (vs my own tendency to construct objects in my own `main` method, and pass them through ctor chains myself.)

@@ -1,23 +1,28 @@
 package com.example.springinitdemo.util;
 
-import com.example.springinitdemo.data.Room;
-import com.example.springinitdemo.data.RoomRepository;
+import java.util.Date;
+import java.util.List;
+
+import com.example.springinitdemo.business.ReservationService;
+import com.example.springinitdemo.business.RoomReservation;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AppStartupEvent implements ApplicationListener<ApplicationReadyEvent> {
+    private final ReservationService reservationService;
+    private final DateUtils dateUtils;
 
-    private final RoomRepository roomRepository;
-
-    public AppStartupEvent(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
+    public AppStartupEvent(ReservationService reservationService, DateUtils dateUtils) {
+        this.reservationService = reservationService;
+        this.dateUtils = dateUtils;
     }
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        Iterable<Room> rooms = this.roomRepository.findAll();
-        rooms.forEach(System.out::println);
+        Date date = this.dateUtils.createDateFromDateString("2022-01-01");
+        List<RoomReservation> reservations = this.reservationService.getRoomReservationsForDate(date);
+        reservations.forEach(System.out::println);
     }
 }
